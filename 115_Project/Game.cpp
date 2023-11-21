@@ -1,7 +1,7 @@
 #include "Game.h"
 #include <tuple>
 
-Game::Game(const string& mapFile, int size) 
+Game::Game(const string& mapFile) 
 {
     string filename = "Map.txt";
 
@@ -12,11 +12,6 @@ Game::Game(const string& mapFile, int size)
 
     n = numRows * numCol;
 
-
-
-
-
-    n = size;
     map = new Map;
 
     ifstream file(mapFile);
@@ -31,6 +26,8 @@ Game::Game(const string& mapFile, int size)
     {
         map->getNode(i)->landType = contents.c_str()[i];
     }
+
+    // INITIALIZE PLAYER AT LOCATION IN MATRIX player = new Player(x,y);
 }
 
 void Game::run()
@@ -39,7 +36,8 @@ void Game::run()
     bool Continue = true;
     while (Continue)
     {
-        map->displayMap();
+        map->printMatrix();
+
         cout << "-----ACTION MENU-----\n" << "Quit (q)\n" << "Move Up (w)\n" << "Move Down (s)\n" << "Move Left (a)\n" << "Move Right (d)\n" << "Skip Turn (space)\n" << "Input: ";
         cin >> userInput;
 

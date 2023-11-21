@@ -4,12 +4,13 @@
 
 int main()
 {
-	Map testMap;
-	cout << "\n\n";
+	//Map testMap;
+	//cout << "\n\n";
 	
-	testMap.printMatrix();
+	//testMap.printMatrix();
 
-
+	Game g("Map.txt");
+	g.run();
 	
 
 }

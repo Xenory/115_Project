@@ -1,5 +1,6 @@
 #pragma once
 #include "Map.h"
+#include "Player.h"
 
 // TERRAIN TYPES
 const char WALL = '#';
@@ -13,13 +14,13 @@ class Game
 {
 
 private:
-
+	Player* player;
 	Map* map;
 	int n;		//map size
 
 public:
 
-	Game(const string& mapFile, int size);
+	Game(const string& mapFile);
 	void run();
 };
 
