@@ -131,6 +131,7 @@
     <ClCompile Include="GraphAL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Priority_Queue.cpp" />
     <ClCompile Include="Queue.cpp" />
   </ItemGroup>
@@ -138,6 +139,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GraphAL.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Priority_Queue.h" />
     <ClInclude Include="Queue.h" />
   </ItemGroup>
