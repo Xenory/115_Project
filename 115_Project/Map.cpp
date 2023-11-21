@@ -12,7 +12,8 @@ const double HIDDEN_WEIGHT = 100;       //enemies can not go through hidden
 
 
 
-Map::Map() {
+Map::Map() 
+{
     string filename = "Map.txt";
 
     ifstream file(filename);  // Open the file for reading
@@ -66,7 +67,12 @@ Map::Map() {
             char currentChar = mapMatrix[i][j];
             int currentNode = i * numCol + j;
             
+            // Initialize Player at Location
+            {
+                player = new Player(i, j);
+            }
             
+
             double weight = getSymbolWeight(currentChar);
             myMap->setNodeWeight(currentNode, weight);
             myMap->setLandType(currentNode, currentChar);
@@ -111,12 +117,12 @@ Map::Map() {
         }
     }
 
-    cout << endl;
+    //cout << endl;
 
-    displayMap();       //prints node weight and landtype
+    //displayMap();       //prints node weight and landtype
 
-    cout << "\n\n";
-    myMap->Display();   //prints adjacency list of graph
+    //cout << "\n\n";
+    //myMap->Display();   //prints adjacency list of graph
     
 
     file.close();  // Close the file when done
@@ -135,8 +141,6 @@ void Map::printMatrix() {
     cout << "Debug: End of printMatrix function" << endl;  // Debug output
 
 }
-
-
 
 
 

@@ -1,10 +1,10 @@
 #pragma once
 #include "GraphAL.h"
-
+#include "Player.h"
 class Map
 {
 private:
-
+	Player* player;
 	int mapSize;
 	GraphAL* myMap;
 
@@ -26,8 +26,6 @@ public:
 	//creating Graph
 	void updateGraph();
 	
-
-
 };
 
 tuple<int, int> countRowsAndColumns(const string& filename);

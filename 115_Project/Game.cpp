@@ -12,7 +12,7 @@ Game::Game(const string& mapFile)
 
     n = numRows * numCol;
 
-    map = new Map;
+    map = new Map();
 
     ifstream file(mapFile);
     string contents((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());

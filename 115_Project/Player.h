@@ -1,4 +1,7 @@
 #pragma once
+#include<iostream>
+using namespace std;
+
 class Player
 {
 private:
@@ -9,6 +12,6 @@ public:
 	Player();
 	Player(int x, int y);
 
-
+	void printPos();
 };
 
