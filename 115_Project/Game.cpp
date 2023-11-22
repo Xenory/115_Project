@@ -41,33 +41,21 @@ void Game::run()
         cout << "-----ACTION MENU-----\n" << "Quit (q)\n" << "Move Up (w)\n" << "Move Down (s)\n" << "Move Left (a)\n" << "Move Right (d)\n" << "Skip Turn (space)\n" << "Input: ";
         cin >> userInput;
 
-        if (userInput == 'q')       // Quit
+        switch (userInput) 
         {
-            Continue = false;
+            case 'w': map->movePlayerUp();      // move up
+                break;
+            case 's': map->movePlayerDown();    // move down
+                break;
+            case 'a': map->movePlayerLeft();    // move left
+                break;
+            case 'd': map->movePlayerRight();   // move right
+                break;
+            default: cout << "Input Error!" << endl;
+                break;
+            case 'q':  Continue = false;        // quit
+                break;
         }
-        else if (userInput == 'w')  // Up
-        {
 
-        }
-        else if (userInput == 's')  // Down
-        {
-
-        }
-        else if (userInput == 'a')  // Left
-        {
-
-        }
-        else if (userInput == 'd')  // Right
-        {
-
-        }
-        else if (userInput == ' ') // Skip
-        {
-
-        }
-        else
-        {
-            cout << "Invalid Input" << endl;
-        }
     }
 }

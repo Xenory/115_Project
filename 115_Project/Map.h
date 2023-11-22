@@ -26,6 +26,11 @@ public:
 	//creating Graph
 	void updateGraph();
 	
+	void movePlayerUp();
+	void movePlayerDown();
+	void movePlayerLeft();
+	void movePlayerRight();
+
 };
 
 tuple<int, int> countRowsAndColumns(const string& filename);

@@ -3,14 +3,12 @@
 #include<vector>
 
 
-const double WALL_WEIGHT = 100;
-const double PLAIN_WEIGHT = 10;
-const double GRASS_WEIGHT = 15;
-const double ENEMY_WEIGHT = 100;        //O
-const double PLAYER_WEIGHT = 0;        //X
+const double WALL_WEIGHT = 100;         // #
+const double PLAIN_WEIGHT = 10;         // ' '
+const double GRASS_WEIGHT = 15;         // -
+const double ENEMY_WEIGHT = 100;        //X
+const double PLAYER_WEIGHT = 0;         //O
 const double HIDDEN_WEIGHT = 100;       //enemies can not go through hidden 
-
-
 
 Map::Map() 
 {
@@ -66,12 +64,6 @@ Map::Map()
         {
             char currentChar = mapMatrix[i][j];
             int currentNode = i * numCol + j;
-            
-            // Initialize Player at Location
-            {
-                player = new Player(i, j);
-            }
-            
 
             double weight = getSymbolWeight(currentChar);
             myMap->setNodeWeight(currentNode, weight);
@@ -114,6 +106,13 @@ Map::Map()
                     
                 }
             
+                // Initialize Player at Location
+                if (currentChar == 'O')
+                {
+                    player = new Player(i, j, myMap->retrieveEdge(currentNode, currentNode));
+                    player->printPos();
+                }
+
         }
     }
 
@@ -142,22 +141,12 @@ void Map::printMatrix() {
 
 }
 
-
-
-
-
-
-
-
-
 //Map::Map(int n)
 //{
 //	mapSize = n;
 //	myMap = new GraphAL(n);
 //	
 //}
-
-
 
 void Map::displayMap()
 {
@@ -174,17 +163,10 @@ void Map::displayMap()
     }
 }
 
-
 nodeAL* Map::getNode(int vertex)
 {
 	return myMap->retrieveEdge(vertex, vertex);
 }
-
-
-
-
-
-
 
 //-----------------------------------------------------------------
 tuple<int, int> countRowsAndColumns(const string& filename) {
@@ -218,4 +200,28 @@ double getSymbolWeight(char symbol) {
         default: return 1.0;
 
     }
+}
+
+void Map::movePlayerUp()
+{
+    cout << "Moving Up" << endl;
+    player->getPlayerNode()->vertex -= numCol;
+}
+
+void Map::movePlayerDown()
+{
+    cout << "Moving Down" << endl;
+
+}
+
+void Map::movePlayerLeft()
+{
+    cout << "Moving Left" << endl;
+
+}
+
+void Map::movePlayerRight()
+{
+    cout << "Moving Right" << endl;
+
 }
