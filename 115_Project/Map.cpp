@@ -189,8 +189,10 @@ tuple<int, int> countRowsAndColumns(const string& filename) {
     return make_tuple(numRows, maxColumns);
 }
 
-double getSymbolWeight(char symbol) {
-    switch (symbol) {
+double getSymbolWeight(char symbol) 
+{
+    switch (symbol) 
+    {
         case '#': return WALL_WEIGHT;
         case 'H': return HIDDEN_WEIGHT;
         case'-': return GRASS_WEIGHT;
@@ -204,14 +206,66 @@ double getSymbolWeight(char symbol) {
 
 void Map::movePlayerUp()
 {
-    cout << "Moving Up" << endl;
-    player->getPlayerNode()->vertex -= numCol;
+    int current = player->playerNode->vertex;
+    int target = player->playerNode->vertex - numCol;
+
+    if (myMap->retrieveEdge(target,target)->landType != '#' )
+    {
+        // update matrix
+        mapMatrix[player->xPos][player->yPos] = player->beneathPlayerNode->landType;
+        player->xPos--;
+        mapMatrix[player->xPos][player->yPos] = player->playerNode->landType;
+
+        // update graph
+        myMap->retrieveEdge(current, current)->landType = player->beneathPlayerNode->landType;
+        myMap->retrieveEdge(current, current)->weight = player->beneathPlayerNode->weight;
+
+        player->beneathPlayerNode = myMap->retrieveEdge(target, target);
+
+        myMap->retrieveEdge(target, target)->landType = player->playerNode->landType;
+        myMap->retrieveEdge(target, target)->weight = player->playerNode->weight;
+
+        // update player class
+        player->playerNode->vertex = target;
+        myMap->Display();
+
+        player->printPos();
+    }
+    else
+    {
+        cout << "Thats a wall dude" << endl;
+    }
 }
 
 void Map::movePlayerDown()
 {
-    cout << "Moving Down" << endl;
+    int current = player->playerNode->vertex;
+    int target = player->playerNode->vertex + numCol;
 
+    if (myMap->retrieveEdge(target, target)->landType != '#')
+    {
+        // update matrix
+        mapMatrix[player->xPos][player->yPos] = player->beneathPlayerNode->landType;
+        player->xPos++;
+        mapMatrix[player->xPos][player->yPos] = player->playerNode->landType;
+
+        // update graph
+        myMap->retrieveEdge(target, target)->landType = player->playerNode->landType;        
+        myMap->retrieveEdge(target, target)->weight = player->playerNode->weight;
+        myMap->retrieveEdge(current, current)->landType = player->beneathPlayerNode->landType;
+        myMap->retrieveEdge(current, current)->weight = player->beneathPlayerNode->weight;
+
+        // update player class
+        player->playerNode->vertex = target;
+        player->beneathPlayerNode = myMap->retrieveEdge(target, target);
+
+        player->printPos();
+        myMap->Display();
+    }
+    else
+    {
+        cout << "Thats a wall dude" << endl;
+    }
 }
 
 void Map::movePlayerLeft()

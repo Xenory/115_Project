@@ -12,7 +12,7 @@ public:
 
 	Map();
 	//Map(int n);
-	
+
 	nodeAL* getNode(int vertex);
 	void displayMap();
 
