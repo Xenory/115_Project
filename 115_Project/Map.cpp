@@ -76,7 +76,8 @@ Map::Map()
                     int adjacentNode = (i - 1) * numCol + j;
                     char adjacentChar = mapMatrix[i - 1][j];
                     double adjWeight = getSymbolWeight(adjacentChar);
-                    myMap->setUndirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
+                    myMap->setDirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
+                    myMap->setDirectedEdge(adjacentNode, currentNode, weight, currentChar);
                 }
 
                 // down
@@ -84,8 +85,8 @@ Map::Map()
                     int adjacentNode = (i + 1) * numCol + j;
                     char adjacentChar = mapMatrix[i + 1][j];
                     double adjWeight = getSymbolWeight(adjacentChar);
-                    myMap->setUndirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
-                    
+                    myMap->setDirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
+                    myMap->setDirectedEdge(adjacentNode, currentNode, weight, currentChar);
                 }
 
                 // left
@@ -93,8 +94,8 @@ Map::Map()
                     int adjacentNode = i * numCol + (j - 1);
                     char adjacentChar = mapMatrix[i][j - 1];
                     double adjWeight = getSymbolWeight(adjacentChar);
-                    myMap->setUndirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
-                    
+                    myMap->setDirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
+                    myMap->setDirectedEdge(adjacentNode, currentNode, weight, currentChar);
                 }
 
                 // right
@@ -102,8 +103,8 @@ Map::Map()
                     int adjacentNode = i * numCol + (j + 1);
                     char adjacentChar = mapMatrix[i][j + 1];
                     double adjWeight = getSymbolWeight(adjacentChar);
-                    myMap->setUndirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
-                    
+                    myMap->setDirectedEdge(currentNode, adjacentNode, adjWeight, adjacentChar);
+                    myMap->setDirectedEdge(adjacentNode, currentNode, weight, currentChar);
                 }
             
                 // Initialize Player at Location
@@ -196,8 +197,8 @@ double getSymbolWeight(char symbol)
         case '#': return WALL_WEIGHT;
         case 'H': return HIDDEN_WEIGHT;
         case'-': return GRASS_WEIGHT;
-        case'X' : return PLAYER_WEIGHT;
-        case'O': return ENEMY_WEIGHT;
+        case'X' : return ENEMY_WEIGHT;
+        case'O': return PLAYER_WEIGHT;
         case' ': return PLAIN_WEIGHT;
         default: return 1.0;
 
@@ -220,15 +221,17 @@ void Map::movePlayerUp()
         myMap->retrieveEdge(current, current)->landType = player->beneathPlayerNode->landType;
         myMap->retrieveEdge(current, current)->weight = player->beneathPlayerNode->weight;
 
-        player->beneathPlayerNode = myMap->retrieveEdge(target, target);
+        player->beneathPlayerNode->landType = myMap->retrieveEdge(target, target)->landType;
+        player->beneathPlayerNode->weight = myMap->retrieveEdge(target, target)->weight;
+        player->beneathPlayerNode->vertex = myMap->retrieveEdge(target, target)->vertex;
 
         myMap->retrieveEdge(target, target)->landType = player->playerNode->landType;
         myMap->retrieveEdge(target, target)->weight = player->playerNode->weight;
 
         // update player class
         player->playerNode->vertex = target;
-        myMap->Display();
 
+        displayMap();
         player->printPos();
     }
     else
@@ -250,17 +253,21 @@ void Map::movePlayerDown()
         mapMatrix[player->xPos][player->yPos] = player->playerNode->landType;
 
         // update graph
-        myMap->retrieveEdge(target, target)->landType = player->playerNode->landType;        
-        myMap->retrieveEdge(target, target)->weight = player->playerNode->weight;
         myMap->retrieveEdge(current, current)->landType = player->beneathPlayerNode->landType;
         myMap->retrieveEdge(current, current)->weight = player->beneathPlayerNode->weight;
 
+        player->beneathPlayerNode->landType = myMap->retrieveEdge(target, target)->landType;
+        player->beneathPlayerNode->weight = myMap->retrieveEdge(target, target)->weight;
+        player->beneathPlayerNode->vertex = myMap->retrieveEdge(target, target)->vertex;
+
+        myMap->retrieveEdge(target, target)->landType = player->playerNode->landType;        
+        myMap->retrieveEdge(target, target)->weight = player->playerNode->weight;
+
         // update player class
         player->playerNode->vertex = target;
-        player->beneathPlayerNode = myMap->retrieveEdge(target, target);
 
+        displayMap();
         player->printPos();
-        myMap->Display();
     }
     else
     {
@@ -270,12 +277,70 @@ void Map::movePlayerDown()
 
 void Map::movePlayerLeft()
 {
-    cout << "Moving Left" << endl;
+    int current = player->playerNode->vertex;
+    int target = player->playerNode->vertex-1;
 
+    if (myMap->retrieveEdge(target, target)->landType != '#')
+    {
+        // update matrix
+        mapMatrix[player->xPos][player->yPos] = player->beneathPlayerNode->landType;
+        player->yPos--;
+        mapMatrix[player->xPos][player->yPos] = player->playerNode->landType;
+
+        // update graph
+        myMap->retrieveEdge(current, current)->landType = player->beneathPlayerNode->landType;
+        myMap->retrieveEdge(current, current)->weight = player->beneathPlayerNode->weight;
+
+        player->beneathPlayerNode->landType = myMap->retrieveEdge(target, target)->landType;
+        player->beneathPlayerNode->weight = myMap->retrieveEdge(target, target)->weight;
+        player->beneathPlayerNode->vertex = myMap->retrieveEdge(target, target)->vertex;
+
+        myMap->retrieveEdge(target, target)->landType = player->playerNode->landType;
+        myMap->retrieveEdge(target, target)->weight = player->playerNode->weight;
+
+        // update player class
+        player->playerNode->vertex = target;
+
+        displayMap();
+        player->printPos();
+    }
+    else
+    {
+        cout << "Thats a wall dude" << endl;
+    }
 }
 
 void Map::movePlayerRight()
 {
-    cout << "Moving Right" << endl;
+    int current = player->playerNode->vertex;
+    int target = player->playerNode->vertex + 1;
 
+    if (myMap->retrieveEdge(target, target)->landType != '#')
+    {
+        // update matrix
+        mapMatrix[player->xPos][player->yPos] = player->beneathPlayerNode->landType;
+        player->yPos++;
+        mapMatrix[player->xPos][player->yPos] = player->playerNode->landType;
+
+        // update graph
+        myMap->retrieveEdge(current, current)->landType = player->beneathPlayerNode->landType;
+        myMap->retrieveEdge(current, current)->weight = player->beneathPlayerNode->weight;
+
+        player->beneathPlayerNode->landType = myMap->retrieveEdge(target, target)->landType;
+        player->beneathPlayerNode->weight = myMap->retrieveEdge(target, target)->weight;
+        player->beneathPlayerNode->vertex = myMap->retrieveEdge(target, target)->vertex;
+
+        myMap->retrieveEdge(target, target)->landType = player->playerNode->landType;
+        myMap->retrieveEdge(target, target)->weight = player->playerNode->weight;
+
+        // update player class
+        player->playerNode->vertex = target;
+
+        displayMap();
+        player->printPos();
+    }
+    else
+    {
+        cout << "Thats a wall dude" << endl;
+    }
 }

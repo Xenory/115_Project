@@ -9,8 +9,6 @@ int main()
 	
 	//testMap.printMatrix();
 
-	Game g("Map.txt");
-	g.run();
-	
-
+	Game gx;
+	gx.run();
 }
