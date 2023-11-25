@@ -18,19 +18,27 @@ void Game::run()
 
         switch (userInput) 
         {
-            case 'w': map->movePlayerUp();      // move up
+            case 'w': 
+                map->movePlayerUp();      // move up
+                map->moveEnemies();
                 break;
-            case 's': map->movePlayerDown();    // move down
+            case 's': 
+                map->movePlayerDown();    // move down
+                map->moveEnemies();
                 break;
-            case 'a': map->movePlayerLeft();    // move left
+            case 'a': 
+                map->movePlayerLeft();    // move left
+                map->moveEnemies();
                 break;
-            case 'd': map->movePlayerRight();   // move right
+            case 'd': 
+                map->movePlayerRight();   // move right
+                map->moveEnemies();
                 break;
             default: cout << "Input Error!" << endl;
                 break;
             case 'q':  Continue = false;        // quit
                 break;
         }
-
+        //system("CLS");
     }
 }

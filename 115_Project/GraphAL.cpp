@@ -298,6 +298,7 @@ void GraphAL::shortestPath(int s, double*& d, int*& pi)
 			}
 		}
 	}
+
 	delete V;
 	delete S;
 }

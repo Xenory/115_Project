@@ -5,7 +5,7 @@
 
 const double WALL_WEIGHT = 100;         // #
 const double PLAIN_WEIGHT = 10;         // ' '
-const double GRASS_WEIGHT = 15;         // -
+const double GRASS_WEIGHT = 30;         // -
 const double ENEMY_WEIGHT = 100;        //X
 const double PLAYER_WEIGHT = 0;         //O
 const double HIDDEN_WEIGHT = 100;       //enemies can not go through hidden 
@@ -57,6 +57,7 @@ Map::Map()
     //populate graph based on the mapMatrix 
 
     myMap = new GraphAL(numRows * numCol);          //create a graph to populate
+    int enemyCount = 0;
 
     for (int i = 0; i < numRows; i++) 
     {
@@ -114,6 +115,56 @@ Map::Map()
                     player->printPos();
                 }
 
+                if (currentChar == 'X' && enemyCount < 3) 
+                {
+                    if (enemyCount == 0)
+                    {
+                        enemy1 = new Enemy(i, j, myMap->retrieveEdge(currentNode, currentNode));
+                        enemy1->printPos();
+                        enemyCount++;
+                    }
+                    else if (enemyCount == 1)
+                    {
+                        enemy2 = new Enemy(i, j, myMap->retrieveEdge(currentNode, currentNode));
+                        enemy2->printPos();
+                        enemyCount++;
+                    }
+                    else if (enemyCount == 2)
+                    {
+                        enemy3 = new Enemy(i, j, myMap->retrieveEdge(currentNode, currentNode));
+                        enemy3->printPos();
+                        enemyCount++;
+                    }
+                    else
+                    {
+                        // 3 enemies created
+                    }
+                }
+        }
+    }
+
+
+    double* d;
+    int* pi;
+
+    myMap->shortestPath(player->playerNode->vertex, d, pi);
+    myMap->DisplayShortestPath(d, pi, numCol* numRows);
+
+    int enemyNodeVertex = enemy1->enemyNode->vertex;
+    int playerNodeVertex = player->playerNode->vertex;
+
+
+    if (pi[enemyNodeVertex] == -1)
+    {
+        cout << "No path from enemy to player";
+    }
+    else
+    {
+        cout << "Shortest path from enemy to player: " << endl;
+        while (enemyNodeVertex != playerNodeVertex)
+        {
+            cout << enemyNodeVertex << " <- ";
+            enemyNodeVertex = pi[enemyNodeVertex];
         }
     }
 
@@ -122,11 +173,9 @@ Map::Map()
     //displayMap();       //prints node weight and landtype
 
     //cout << "\n\n";
-    //myMap->Display();   //prints adjacency list of graph
-    
+    myMap->Display();   //prints adjacency list of graph
 
     file.close();  // Close the file when done
-
 }
 
 
@@ -230,9 +279,6 @@ void Map::movePlayerUp()
 
         // update player class
         player->playerNode->vertex = target;
-
-        displayMap();
-        player->printPos();
     }
     else
     {
@@ -265,9 +311,6 @@ void Map::movePlayerDown()
 
         // update player class
         player->playerNode->vertex = target;
-
-        displayMap();
-        player->printPos();
     }
     else
     {
@@ -300,9 +343,6 @@ void Map::movePlayerLeft()
 
         // update player class
         player->playerNode->vertex = target;
-
-        displayMap();
-        player->printPos();
     }
     else
     {
@@ -335,12 +375,98 @@ void Map::movePlayerRight()
 
         // update player class
         player->playerNode->vertex = target;
-
-        displayMap();
-        player->printPos();
     }
     else
     {
         cout << "Thats a wall dude" << endl;
     }
+}
+
+void Map::moveEnemies()
+{
+    moveEnemy1();
+    //moveEnemy2();
+    //moveEnemy3();
+}
+
+void Map::moveEnemy1()
+{
+    double* d;
+    int* pi;
+
+    myMap->shortestPath(player->playerNode->vertex, d, pi);
+    myMap->DisplayShortestPath(d, pi, numCol * numRows);
+
+    int enemyNodeVertex = enemy1->enemyNode->vertex;
+    int playerNodeVertex = player->playerNode->vertex;
+
+
+    if (pi[enemyNodeVertex] == -1)
+    {
+        cout << "No path from enemy to player";
+    }
+    else
+    {
+        cout << "Shortest path from enemy to player: " << endl;
+        while (enemyNodeVertex != playerNodeVertex)
+        {
+            cout << enemyNodeVertex << " <- ";
+            enemyNodeVertex = pi[enemyNodeVertex];
+        }
+    }
+
+    /*
+    enemyNodeVertex = enemy->enemyNode->vertex;
+
+    int current = enemyNodeVertex;
+    int target = pi[enemyNodeVertex];
+
+    // update matrix
+    mapMatrix[enemy->xPos][enemy->yPos] = enemy->beneathEnemyNode->landType;
+
+    if (target == enemyNodeVertex - numCol) // up
+    {
+        enemy->xPos--;
+    }
+    else if (target == enemyNodeVertex + numCol) // down
+    {
+        enemy->xPos++;
+    }
+    else if (target == enemyNodeVertex + 1)    // right
+    {
+        enemy->yPos++;
+    }
+    else if (target == enemyNodeVertex - 1)    // left
+    {
+        enemy->yPos--;
+    }
+
+    mapMatrix[enemy->xPos][enemy->yPos] = enemy->enemyNode->landType;
+
+    // update graph
+    myMap->retrieveEdge(current, current)->landType = enemy->beneathEnemyNode->landType;
+    myMap->retrieveEdge(current, current)->weight = enemy->beneathEnemyNode->weight;
+
+    enemy->beneathEnemyNode->landType = myMap->retrieveEdge(target, target)->landType;
+    enemy->beneathEnemyNode->weight = myMap->retrieveEdge(target, target)->weight;
+    enemy->beneathEnemyNode->vertex = myMap->retrieveEdge(target, target)->vertex;
+
+    myMap->retrieveEdge(target, target)->landType = enemy->enemyNode->landType;
+    myMap->retrieveEdge(target, target)->weight = enemy->enemyNode->weight;
+
+    // update player class
+    enemy->enemyNode->vertex = target;
+    */
+    delete[] d;
+    delete[] pi;
+}
+
+void Map::moveEnemy2()
+{
+
+}
+
+void Map::moveEnemy3()
+{
+
 }

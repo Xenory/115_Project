@@ -7,6 +7,7 @@ private:
 	Player* player;
 	int mapSize;
 	GraphAL* myMap;
+	Enemy* enemy1, *enemy2, *enemy3;
 
 public:
 
@@ -31,6 +32,10 @@ public:
 	void movePlayerLeft();
 	void movePlayerRight();
 
+	void moveEnemies();
+	void moveEnemy1();
+	void moveEnemy2();
+	void moveEnemy3();
 };
 
 tuple<int, int> countRowsAndColumns(const string& filename);

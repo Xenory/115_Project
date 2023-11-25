@@ -41,7 +41,7 @@ void PriorityQueue::minHeapify(int i, int size)
 	if (smallest != i)
 	{
 		swap(queue[i], queue[smallest]);
-		minHeapify(i, nelements);
+		minHeapify(smallest, nelements);
 	}
 }
 

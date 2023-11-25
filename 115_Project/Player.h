@@ -18,3 +18,15 @@ public:
 
 };
 
+class Enemy {
+public:
+	int xPos;
+	int yPos;
+	nodeAL* enemyNode;
+	nodeAL* beneathEnemyNode;
+
+	Enemy();
+	Enemy(int x, int y, nodeAL* eNode);
+
+	void printPos();
+};
